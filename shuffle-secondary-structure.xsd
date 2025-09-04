@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://example.com/protein"
+           xmlns:tns="http://example.com/protein"
+           elementFormDefault="qualified">
+
+  <!-- Root Element containing protein sequences and ranges describing structures under known conditions -->
+  <xs:element name="secondaryStructure" type="tns:ProteinStructure"/>
+
+  <!-- Main container type -->
+  <xs:complexType name="ProteinStructure">
+    <xs:sequence>
+      <xs:element name="protein" type="tns:ProteinType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="structure" type="tns:RangesType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Protein type containing sequence and ranges -->
+  <xs:complexType name="ProteinType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="name" type="xs:string" minOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="1"/>
+      <xs:element name="ranges" type="tns:RangesType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Sequence type with amino acid validation -->
+  <xs:complexType name="AminoSequenceType">
+    <xs:simpleContent>
+      <xs:extension base="tns:AminoAcidSequence">
+        <xs:attribute name="length" type="xs:nonNegativeInteger" use="optional"/>
+        <xs:attribute name="type" type="xs:string" default="protein"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Amino acid sequence pattern (standard single-letter codes) -->
+  <xs:simpleType name="AminoAcidSequence">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[ACDEFGHIKLMNPQRSTVWY*X-]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Container for multiple ranges -->
+  <xs:complexType name="RangesType">
+    <xs:sequence>
+      <xs:element name="range" type="tns:RangeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Range type with zero-based indexing -->
+  <xs:complexType name="RangeType">
+    <xs:sequence>
+      <xs:element name="start" type="xs:nonNegativeInteger"/>
+      <xs:element name="end" type="xs:nonNegativeInteger"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="xs:string" minOccurs="0"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="properties" type="tns:PropertiesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <!-- Properties for additional range metadata -->
+  <xs:complexType name="PropertiesType">
+    <xs:sequence>
+      <xs:element name="property" type="tns:PropertyType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Individual property (key-value pair) -->
+  <xs:complexType name="PropertyType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+</xs:schema>
