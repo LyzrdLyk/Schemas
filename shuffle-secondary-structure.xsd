@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           targetNamespace="http://example.com/protein"
-           xmlns:tns="http://example.com/protein"
+           targetNamespace="http://lyzardlyk.com/protein"
+           xmlns:tns="http://lyzardlyk.com/protein"
            elementFormDefault="qualified">
 
   <!-- Root Element containing protein sequences and ranges describing structures under known conditions -->
